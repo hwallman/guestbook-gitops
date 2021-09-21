@@ -46,25 +46,41 @@ jobs:
       id: login-ecr
       uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build and tag the image
+ #   - name: Build and tag the image
+ #     run: |
+ #       # Build and tag the image
+ #       docker build \
+ #         -t $CONTAINER_IMAGE \
+ #         -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE ./php-redis
+          
+
+    - name: Build, tag, and push the image to Amazon ECR
+      id: build-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: ${{ secrets.REPO_NAME }}
+        IMAGE_TAG: 1.0
       run: |
-        # Build and tag the image
-        docker build \
-          -t $CONTAINER_IMAGE \
-          -t $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE ./php-redis
+        # Build a docker container and push it to ECR 
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./php-redis
+   #     echo "Pushing image to ECR..."
+  #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+  #      echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+
+          
  
     # Set image tag in kustomization
 
     - name: Set image tag
       run: |
           cd deploy
-          kustomize edit set image $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
+          kustomize edit set image $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
           cat kustomization.yaml
     - name: Commit kustomization
       run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git commit -a -m "$CONTAINER_IMAGE"
+          git commit -a -m "$ECR_REPOSITORY:$IMAGE_TAG"
     - name: Push changes to master
       uses: ad-m/github-push-action@master
       with:
@@ -79,4 +95,4 @@ jobs:
       if: github.ref == 'refs/heads/master'
       run: |
         # Push image to AWS ECR
-        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$CONTAINER_IMAGE
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
