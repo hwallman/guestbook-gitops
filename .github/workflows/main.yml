@@ -24,32 +24,28 @@ env:
   CONTAINER_IMAGE: guestbook:${{ github.sha }}
 
 jobs:
+
+
+
   build-and-push:
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
 
     - name: Checkout
-      uses: actions/checkout@master
-
-    # Add steps here like linting, testing, minification, etc.
+      uses: actions/checkout@v2
 
     - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@13d241b293754004c80624b5567555c4a39ffbe3
+      uses: aws-actions/configure-aws-credentials@v1
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ${{ env.AWS_DEFAULT_REGION }}
+        aws-region: eu-north-1
 
-    - name: Setup ECR
-      run: |
-        # Login to AWS ECR
-        $( aws ecr get-login --no-include-email )
-        
     - name: Login to Amazon ECR
       id: login-ecr
-      uses: aws-actions/amazon-ecr-login@aaf69d68aa3fb14c1d5a6be9ac61fe15b48453a2    
-    
+      uses: aws-actions/amazon-ecr-login@v1
+
     - name: Build and tag the image
       run: |
         # Build and tag the image
