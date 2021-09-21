@@ -62,7 +62,7 @@ jobs:
         IMAGE_TAG: guestbook:${{ github.sha }}
       run: |
         # Build a docker container and push it to ECR 
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./php-redis
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY$IMAGE_TAG ./php-redis
    #     echo "Pushing image to ECR..."
   #      docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
   #      echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
@@ -74,7 +74,7 @@ jobs:
     - name: Set image tag
       run: |
           cd deploy
-          kustomize edit set image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          kustomize edit set image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY$IMAGE_TAG
           cat kustomization.yaml
           
       
@@ -82,7 +82,7 @@ jobs:
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
         git config --local user.name "github-actions[bot]"
-        git commit -m "$ECR_REPOSITORY:$IMAGE_TAG" -a
+        git commit -m "$ECR_REPOSITORY$IMAGE_TAG" -a
     - name: Push changes
       uses: ad-m/github-push-action@master
       with:
@@ -98,4 +98,4 @@ jobs:
       if: github.ref == 'refs/heads/master'
       run: |
         # Push image to AWS ECR
-        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY$IMAGE_TAG
