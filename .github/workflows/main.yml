@@ -76,17 +76,20 @@ jobs:
           cd deploy
           kustomize edit set image=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
           cat kustomization.yaml
-    - name: Commit kustomization
+          
+      
+    - name: Commit files
       run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
-          git commit -a -m "$ECR_REPOSITORY:$IMAGE_TAG"
-    - name: Push changes to master
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -m "$ECR_REPOSITORY:$IMAGE_TAG" -a
+    - name: Push changes
       uses: ad-m/github-push-action@master
       with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: master
-          force: true       
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}          
+          
+    
     
     # Add additional steps here like scanning of image
 
