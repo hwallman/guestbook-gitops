@@ -15,5 +15,4 @@ images:
   newName: guestbook
   newTag: 3fa38b9d2acb82a6e567c5935d1037a1339e4f1d
 - name: guestbook
-  newName: guestbook
-  newTag: new
+  newTag: 8434cbb82ce75241690d3beefbe555c866bd30ec
