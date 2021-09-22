@@ -9,6 +9,7 @@ resources:
 - redis-slave-service.yaml
 
 images:
+- {}
 - name: /
   newName: /
 - name: 139286777794.dkr.ecr.eu-north-1.amazonaws.com/gitops
