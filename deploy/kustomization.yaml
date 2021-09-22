@@ -12,7 +12,7 @@ images:
 - name: /
 - name: 139286777794.dkr.ecr.eu-north-1.amazonaws.com/gitops
   newName: 139286777794.dkr.ecr.eu-north-1.amazonaws.com/gitops
-  newTag: 29dd60262c749e728376c6c233114d86e343a4df
+  newTag: 805e8c068b65098913fd63e6463e95dd7e4c6bda
 - name: frontend
   newName: guestbook
   newTag: 3fa38b9d2acb82a6e567c5935d1037a1339e4f1d
