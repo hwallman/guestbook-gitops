@@ -11,8 +11,8 @@ resources:
 images:
 - name: /
 - name: 139286777794.dkr.ecr.eu-north-1.amazonaws.com/gitops
-  newName: gitops
-  newTag: fdd8f8cf442a2952660d5df9b870a2015c4ba731
+  newName: 139286777794.dkr.ecr.eu-north-1.amazonaws.com/gitops
+  newTag: f51744dcdd2a7b87ad2e799c8c34b5d678f0436d
 - name: frontend
   newName: guestbook
   newTag: 3fa38b9d2acb82a6e567c5935d1037a1339e4f1d
