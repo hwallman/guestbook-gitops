@@ -62,10 +62,10 @@ jobs:
         IMAGE_TAG: ${{ github.sha }}
       run: |
         # Build a docker container and push it to ECR 
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./php-redis
-        echo "NOT Pushing image to ECR..."
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY/$CONTAINER_IMAGE ./php-redis
+        echo "Pushing image to ECR..."
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY/$CONTAINER_IMAGE
+        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY/$CONTAINER_IMAGE"
 
           
  
@@ -74,7 +74,7 @@ jobs:
     - name: Set image tag
       run: |
           cd deploy
-          kustomize edit set image $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
+          kustomize edit set image $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY/$CONTAINER_IMAGE
           cat kustomization.yaml
           
       
